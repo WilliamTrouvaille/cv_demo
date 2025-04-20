@@ -28,7 +28,7 @@ class TrainingProgress:
         self.colours = colours or {
             'train': '#00ff00',
             'val': '#ffff00',
-            'test': '#00ffff'
+            'test.py': '#00ffff'
         }
 
         # 训练计时

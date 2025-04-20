@@ -1,0 +1,13 @@
+training:
+  epochs: 20
+  batch_size: 256
+  learning_rate: 0.001
+  early_stopping:
+    enable: true
+    patience: 5
+
+paths:
+  model_save: "models/mnist_cnn.pth"
+
+logging:
+  level: INFO
