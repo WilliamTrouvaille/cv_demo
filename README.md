@@ -5,29 +5,29 @@
 > TODO LIST
 >
 > 1. **经典分类任务**：MNIST（手写数字）、CIFAR-10（10类物体）
-> 2. **自动驾驶场景**：BDD100K（驾驶视频）、KITTI（3D点云+图像）
+> 2. **自动驾驶场景**：车牌识别、BDD100K（驾驶视频）、KITTI（3D点云+图像）
 
 ## 手写数字MNIST
 
 + **项目概述**：本项目是一个基于 PyTorch 的 MNIST 手写数字分类任务，包括模型训练和模型评测两个主要模块。通过卷积神经网络CNN对 MNIST 数据集进行分类，并提供了丰富的评测指标和可视化结果。
 
-+ 数据集：MNIST 手写数字数据集（28x28 灰度图像，10 个类别）。
++ **数据集**：MNIST 手写数字数据集（28x28 灰度图像，10 个类别）。
 
-+ 数据预处理：简单地转换为张量并归一化。
++ **数据预处理**：简单地转换为张量并归一化。
 
-+ 模型选型：CNN 模型（1 通道；2 层卷积 + ReLU 激活 + 最大池化；2 层全连接 + Dropout）
++ **模型选型**：CNN 模型（1 通道；2 层卷积 + ReLU 激活 + 最大池化；2 层全连接 + Dropout）
 
-+ 训练流程
++ **训练流程**
 
-  + 优化器：Adam。
-  + 损失函数：交叉熵损失（nn.CrossEntropyLoss）。
-  + 学习率调整：ReduceLROnPlateau，基于验证集准确率动态调整学习率。
-  + 早停机制：如果验证集准确率连续多个 epoch 未提升，则提前停止训练。
-  + 模型保存：每个 epoch 保存最新模型，保存验证集准确率最高的模型。
+  + **优化器**：Adam。
+  + **损失函数**：交叉熵损失（nn.CrossEntropyLoss）。
+  + **学习率调整**：ReduceLROnPlateau，基于验证集准确率动态调整学习率。
+  + **早停机制**：如果验证集准确率连续多个 epoch 未提升，则提前停止训练。
+  + **模型保存**：每个 epoch 保存最新模型，保存验证集准确率最高的模型。
 
-+ 评测指标：
++ **评测指标**
 
-  + 分类报告：精确率（Precision）、召回率（Recall）、F1 分数。
+  + **分类报告**：精确率（Precision）、召回率（Recall）、F1 分数。
 
     ```txt
               precision    recall  f1-score   support
@@ -49,14 +49,38 @@
     weighted avg   0.99      0.99      0.99     10000
     ```
 
-  + 混淆矩阵：展示模型在每个类别上的分类情况。
+  + **混淆矩阵**：展示模型在每个类别上的分类情况。
 
     ![confusion_matrix](./MNIST_demo/docs/confusion_matrix.png)
 
-  + ROC 曲线：展示模型在多分类任务中的性能。
+  + **ROC 曲线**：展示模型在多分类任务中的性能。
 
     ![roc_curve](./MNIST_demo/docs/roc_curve.png)
 
-  + PR 曲线：展示精确率与召回率的关系。
+  + **PR 曲线**：展示精确率与召回率的关系。
 
     ![pr_curve](./MNIST_demo/docs/pr_curve.png)
+
+## 车牌识别LPR
+
++ **数据集**：[CCPD](https://github.com/detectRecog/CCPD?tab=readme-ov-file)
+
++ **参考文献**
+
+  + [数据集来源论文](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16)
+
++ **子数据集描述**：[数据集来源论文关于不同子数据集的描述](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16/tables/3)
+
+  |                | 解释                                                         |
+  | :------------- | ------------------------------------------------------------ |
+  | CCPD-Base      | 唯一共同特征是包含车牌。                                     |
+  | CCPD-DB        | 车牌区域的照明较暗、不均匀或非常亮。                         |
+  | CCPD-FN        | 车牌到拍摄位置的距离相对较远或较近。                         |
+  | CCPD-Rotate    | 水平倾斜角度很大（$20^\circ\sim50^\circ$）且垂直倾斜角度从$-10^\circ\sim10^\circ$变化。 |
+  | CCPD-Tilt      | 水平倾斜角度较大（$15^\circ\sim45^\circ$）和垂直倾斜角度（$15^\circ\sim45^\circ$） |
+  | CCPD-Blur      | 主要由于拍照时手抖导致模糊                                   |
+  | CCPD-Weather   | 雨天、雪天或雾天拍摄的图片                                   |
+  | CCPD-Challenge | 到目前（[数据集来源论文](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16)发表时间点）为止对 LPDR 最具挑战性的图片 |
+  | CCPD-NP        | 新车的照片没有车牌                                           |
+
+  
