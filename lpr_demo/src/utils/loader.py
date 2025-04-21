@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+"""
+Created on 2025/03/21 20:30
+@version : 1.0.0
+@author  : William_Trouvaille
+@function: 加载工具类
+"""
 from pathlib import Path
 
 import yaml

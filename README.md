@@ -63,24 +63,10 @@
 
 ## 车牌识别LPR
 
-+ **数据集**：[CCPD](https://github.com/detectRecog/CCPD?tab=readme-ov-file)
-
++ **数据集**：[CCPD2020](https://github.com/detectRecog/CCPD?tab=readme-ov-file)，仅包含新能源浅绿车牌相关数据，能很好反映近年来新能源的强势崛起。
 + **参考文献**
-
-  + [数据集来源论文](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16)
-
-+ **子数据集描述**：[数据集来源论文关于不同子数据集的描述](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16/tables/3)
-
-  |                | 解释                                                         |
-  | :------------- | ------------------------------------------------------------ |
-  | CCPD-Base      | 唯一共同特征是包含车牌。                                     |
-  | CCPD-DB        | 车牌区域的照明较暗、不均匀或非常亮。                         |
-  | CCPD-FN        | 车牌到拍摄位置的距离相对较远或较近。                         |
-  | CCPD-Rotate    | 水平倾斜角度很大（$20^\circ\sim50^\circ$）且垂直倾斜角度从$-10^\circ\sim10^\circ$变化。 |
-  | CCPD-Tilt      | 水平倾斜角度较大（$15^\circ\sim45^\circ$）和垂直倾斜角度（$15^\circ\sim45^\circ$） |
-  | CCPD-Blur      | 主要由于拍照时手抖导致模糊                                   |
-  | CCPD-Weather   | 雨天、雪天或雾天拍摄的图片                                   |
-  | CCPD-Challenge | 到目前（[数据集来源论文](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16)发表时间点）为止对 LPDR 最具挑战性的图片 |
-  | CCPD-NP        | 新车的照片没有车牌                                           |
-
-  
+  1. [数据集来源论文](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16)
++ （弃用）[数据集来源论文关于不同子数据集的描述](https://link.springer.com/chapter/10.1007/978-3-030-01261-8_16/tables/3)
+  + 本项目采用YOLO11，通过改进的检测头和多尺度特征融合，对倾斜、模糊等场景有较强的鲁棒性，无需严格进行划分子数据集。
++ **数据预处理**
+  1. CCPD2020数据集直接将标注信息嵌入到图像的文件名中，其中共包含七个部分，本项目只使用其中的①车牌标注框坐标和②车牌四顶点坐标。

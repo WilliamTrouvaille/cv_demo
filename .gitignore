@@ -29,8 +29,8 @@ MANIFEST
 # 自定义
 **local**
 **idea**
-**log**
-lpr_demo/data
+lpr_demo/data/raw
+**logs**
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
