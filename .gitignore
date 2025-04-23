@@ -29,7 +29,7 @@ MANIFEST
 # 自定义
 **local**
 **idea**
-lpr_demo/data/raw
+lpr_demo/data/*
 **logs**
 
 # PyInstaller

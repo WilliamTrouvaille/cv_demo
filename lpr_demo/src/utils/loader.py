@@ -7,6 +7,7 @@ Created on 2025/03/21 20:30
 @function: 加载工具类
 """
 from pathlib import Path
+import platform
 
 import yaml
 
@@ -40,3 +41,8 @@ class Loader:
     def build_path(cls, *path_parts) -> str:
         """构建基于项目根目录的绝对路径"""
         return str(cls.get_root_dir().joinpath(*path_parts))
+
+    @staticmethod
+    def is_windows() -> bool:
+        """判断当前操作系统是否为Windows"""
+        return platform.system() == 'Windows'

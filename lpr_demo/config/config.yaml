@@ -4,3 +4,25 @@ alphabets: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P
              'X', 'Y', 'Z', 'O' ]
 ads: [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
        'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'O' ]
+
+# 调试配置
+debug: False
+
+# 数据路径配置
+data_paths:
+    raw: "data/raw"      # 原始数据根目录
+    yolo: "data/yolo"    # YOLO格式数据集目录
+
+
+# 模型参数
+model:
+    input_size: 640
+    batch_size: 16
+    epochs: 50
+    patience: 10
+
+# 数据处理高级选项
+data_processing:
+    max_workers: 4      # 并行处理线程数
+    validation_split: 0.2
+    test_split: 0.1
