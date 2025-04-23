@@ -14,15 +14,37 @@ data_paths:
     yolo: "data/yolo"    # YOLO格式数据集目录
 
 
-# 模型参数
+# 模型配置
 model:
-    input_size: 640
-    batch_size: 16
-    epochs: 50
-    patience: 10
+  detector:
+    pretrained: yolov8n.yaml
+    freeze_backbone: True
+  recognizer:
+    input_size: 128
+    lstm_units: 256
 
 # 数据处理高级选项
 data_processing:
     max_workers: 4      # 并行处理线程数
     validation_split: 0.2
     test_split: 0.1
+    
+# 训练参数
+training:
+    epochs: 100
+    batch_size: 16
+    patience: 10  # 早停轮次
+    optimizer: Adam
+    lr: 0.001
+    weight_decay: 0.0005
+    validation_split: 0.2
+
+# 优化器
+optim:
+  det_lr: 0.001
+  recog_lr: 0.01
+  weight_decay: 0.0005
+
+# 损失权重
+loss:
+  recog_weight: 0.8

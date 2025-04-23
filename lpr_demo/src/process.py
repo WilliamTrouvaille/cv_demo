@@ -6,16 +6,11 @@ Created on 2025/4/21 23:33
 @author  : William_Trouvaille
 @function: 数据预处理
 """
-
-# TODO：①将原始数据集转换为YOLO格式；
-#  ②使用透视变化提取出车牌；
-#  ③压缩成果文件并将其上传git
 import os
 import shutil
 import traceback
 from pathlib import Path
 from typing import Tuple, List
-import platform
 
 import yaml
 from PIL import Image
@@ -23,7 +18,6 @@ from PIL import Image
 from src.utils import Loader, LoggerHandler, TrainingProgress
 
 logger = LoggerHandler()
-
 
 
 class CCPDProcessor:
@@ -56,10 +50,10 @@ class CCPDProcessor:
         self.yolo_images.mkdir(parents=True, exist_ok=True)
         self.yolo_labels.mkdir(parents=True, exist_ok=True)
 
-    def parse_filename(self, filename: str) -> Tuple[List[Tuple[int, int]], str]:
+    def parse_filename(self, filename: str) -> tuple[list[tuple[int, ...]], str]:
         """
-        解析CCPD文件名，返回顶点坐标和车牌号
-        格式：015-91_90-248&454_464&524-464&524_248&520_248&454_462&460-0_0_3_24_33_29_27_27-141-187
+        解析CCPD文件名，返回：(顶点坐标, 车牌号文本)
+        示例：015-91_90-248&454_464&524-464&524_248&520_248&454_462&460-0_0_3_24_33_29_27_27-141-187
         """
         parts = filename.split('-')
         if len(parts) < 7:
@@ -73,10 +67,26 @@ class CCPDProcessor:
 
         # 解析车牌号（第五部分）
         code_part = parts[4].split('_')
-        province = self.config['provinces'][int(code_part[0])]
-        alphabet = self.config['alphabets'][int(code_part[1])]
-        ad_chars = [self.config['ads'][int(c)] for c in code_part[2:7]]
-        plate_number = f"{province}{alphabet}-{''.join(ad_chars)}"
+        if len(code_part) < 7:
+            raise ValueError(f"Invalid license plate code: {parts[4]}")
+
+        try:
+            # 解析省份
+            province_idx = int(code_part[0])
+            province = self.config['provinces'][province_idx]
+
+            # 解析字母
+            alphabet_idx = int(code_part[1])
+            alphabet = self.config['alphabets'][alphabet_idx]
+
+            # 解析五位字符
+            ad_indices = map(int, code_part[2:7])
+            ad_chars = [self.config['ads'][idx] for idx in ad_indices]
+
+            # 拼接车牌号（格式：皖A-12345）
+            plate_number = f"{province}{alphabet}-{''.join(ad_chars)}"
+        except IndexError as e:
+            raise ValueError(f"Invalid character index: {str(e)}")
 
         return vertices, plate_number
 
@@ -148,11 +158,16 @@ class CCPDProcessor:
                 filename = img_path.stem
                 vertices, plate_num = self.parse_filename(filename)
 
-                # 生成YOLO标注
+                # 转换YOLO坐标
                 bbox = self.vertices_to_yolo(vertices, img_w, img_h)
+
+                # 生成标注文件
                 label_path = yolo_label_dir / f"{filename}.txt"
-                with open(label_path, 'w') as f:
+                with open(label_path, 'w', encoding='utf-8') as f:
+                    # 写入检测框（YOLO格式）
                     f.write(f"0 {bbox[0]:.6f} {bbox[1]:.6f} {bbox[2]:.6f} {bbox[3]:.6f}\n")
+                    # 追加车牌号文本
+                    f.write(f"{plate_num}\n")
 
                 processed += 1
             except Exception as e:
@@ -171,8 +186,7 @@ class CCPDProcessor:
         pbar.close()
         logger.info(
             f"{split.upper()} Process Report | "
-            f"Total: {total}, Success: {processed}, Errors: {errors}, "
-            f"Success Rate: {(processed / total) * 100:.2f}%"
+            f"Success Rate: {(processed/(processed+errors))*100:.2f}%"
         )
 
     def generate_data_yaml(self):

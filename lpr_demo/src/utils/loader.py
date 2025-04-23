@@ -37,10 +37,6 @@ class Loader:
             config = yaml.safe_load(f)
         return config
 
-    @classmethod
-    def build_path(cls, *path_parts) -> str:
-        """构建基于项目根目录的绝对路径"""
-        return str(cls.get_root_dir().joinpath(*path_parts))
 
     @staticmethod
     def is_windows() -> bool:
